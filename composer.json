@@ -1,0 +1,24 @@
+{
+    "name": "chenall/phalapi",
+    "description": "PhalApi 2.x 自用子类扩展",
+    "type": "library",
+    "keywords": [
+        "phalapi", "phalapi-view","phalapi-扩展"
+    ],
+    "license": "GPL-3.0+",
+    "minimum-stability": "dev",
+    "homepage": "https://www.phalapi.net/",
+    "authors": [
+        {
+            "name": "chenall",
+            "email": "chenall.cn@gmail.com",
+            "homepage": "http://chenall.net/",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Chenall\\PhalApi\\": "src/"
+        }
+    } 
+}
