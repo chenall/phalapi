@@ -3,7 +3,13 @@
 
 ## 使用方法:
 
-1. 在config目录中增加`rules.php`配置文件(所有需要的参数规则).
+1. 安装
+
+    ```shell
+    composer require chenall/phalapi
+    ```
+
+2. 在config目录中增加`rules.php`配置文件(所有需要的参数规则).
 
     ```php
     return array(
@@ -16,7 +22,7 @@
 
     注: 如果需要配置多APP,可以使用`rules@appname.php` 作为配置文件.
 
-2. 在`api`中不再需要重写`getRules`函数了,直接使用`$Rules`指定需要的参数列表即可.
+3. 在`api`中不再需要重写`getRules`函数了,直接使用`$Rules`指定需要的参数列表即可.
 
     ```php
     namespace App\Api;
@@ -36,7 +42,7 @@
     );
     ```
 
-3. 编辑器友好的例子(自动完成)
+5. 编辑器友好的例子(自动完成)
 
     ```php
     //App\Domain\Site.php

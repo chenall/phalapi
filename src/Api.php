@@ -24,10 +24,11 @@ class Api extends \PhalApi\Api
         if (empty($this->Rules)) {
             return array();
         }
-        $root = DI()->request->getNamespace();
-        $allrules = DI()->config->get('rules@' . $root, array());
+        $di = \PhalApi\DI();
+        $root = $di->request->getNamespace();
+        @$allrules = $di->config->get('rules@' . $root, array());
         if (empty($allrules)) {
-            $allrules = DI()->config->get('rules', array());
+            @$allrules = $di->config->get('rules', array());
         }
         if (empty($allrules)) {
             return array();
