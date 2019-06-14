@@ -12,10 +12,13 @@ class Excel
     private $maxCol = 0;
     private $maxRow = 0;
     /**
-	 * @var Worksheet
-	 */
+     * @var Worksheet
+     */
     private $Sheet;
     private $currentRow = 1;
+    /** @var \PhpOffice\PhpSpreadsheet\Spreadsheet */
+    private $Spreadsheet;
+    private $sheetCount;
 
 
     public function load($file, $tmpfile = false)
@@ -27,20 +30,22 @@ class Excel
         } else $reader = $this->CreateReader($file);
         if (empty($reader)) return false;
         $Spreadsheet = $reader->load($file);
+        $this->sheetCount = $Spreadsheet->getSheetCount();
+        $this->Spreadsheet = $Spreadsheet;
         $this->Sheet = $Spreadsheet->getActiveSheet();
         $this->maxCol = $this->Sheet->getHighestColumn();
         $this->maxRow = $this->Sheet->getHighestRow();
         return $this;
     }
     /**
-	 * Create Reader\IReader.
-	 *
-	 * @param string $readerType Example: Xlsx
-	 *
-	 * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
-	 *
-	 * @return \PhpOffice\PhpSpreadsheet\Reader\IReader
-	 */
+     * Create Reader\IReader.
+     *
+     * @param string $readerType Example: Xlsx
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     *
+     * @return \PhpOffice\PhpSpreadsheet\Reader\IReader
+     */
     private function CreateReader($filename)
     {
         $pathinfo = pathinfo($filename);
@@ -59,6 +64,43 @@ class Excel
             default:
                 return null;
         }
+    }
+
+    /**
+     * 获取当前工作表
+     *
+     * @return Worksheet
+     */
+    public function getSheet()
+    {
+        return $this->Sheet;
+    }
+
+    /**
+     * 设置当前工作表
+     *
+     * @return Worksheet
+     */
+    public function setSheet($id)
+    {
+        if ($id >= 0 && $id < $this->sheetCount) {
+            $sheet = $this->Spreadsheet->setActiveSheetIndex($id);
+            $this->currentRow = 1;
+            $this->maxCol = $sheet->getHighestColumn();
+            $this->maxRow = $sheet->getHighestRow();
+            return $this->Sheet = $sheet;
+        }
+        return null;
+    }
+
+    /**
+     * 设置表格读取的最大列
+     * 
+     */
+    public function setMaxCol($col)
+    {
+        $this->maxCol = $col;
+        return $this;
     }
 
     public function readLine($row = 0)
