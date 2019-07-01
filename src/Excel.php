@@ -6,6 +6,8 @@ use \PhpOffice\PhpSpreadsheet\Reader\Csv;
 use \PhpOffice\PhpSpreadsheet\Reader\Xls;
 use \PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Style\Style;
 
 class Excel
 {
@@ -103,11 +105,23 @@ class Excel
         return $this;
     }
 
-    public function readLine($row = 0)
+    /**
+     * 读取当前表格的一行
+     *
+     * @param integer $row  行号,等于0是自动读取下一行
+     * @param boolean|array $formatData 自定义列格式.
+     * @return false|array 失败时返回false,否则返回数组.
+     */
+    public function readLine($row = 0, $formatData = true)
     {
         if ($row == 0) $row = $this->currentRow;
         if ($row > $this->maxRow) return false;
-        $data = $this->Sheet->rangeToArray('A' . $row . ':' . $this->maxCol . $row, null, true, true, true);
+        $data = $this->Sheet->rangeToArray('A' . $row . ':' . $this->maxCol . $row, null, true, $formatData === true, true);
+        if (is_array($formatData)) {
+            foreach ($formatData as $n => $v) {
+                $data[$row][$n] = NumberFormat::toFormattedString($data[$row][$n], $v);
+            }
+        }
         $this->currentRow = $row + 1;
         return $data[$row];
     }
