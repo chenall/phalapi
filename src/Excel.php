@@ -1,4 +1,5 @@
 <?php
+
 namespace Chenall\PhalApi;
 
 use \PhpOffice\PhpSpreadsheet\IOFactory;
@@ -110,9 +111,10 @@ class Excel
      *
      * @param integer $row  行号,等于0是自动读取下一行
      * @param boolean|array $formatData 自定义列格式.
+     * @param array 标题信息(字段名) 例子 ['金额'=>'B','备注'=>'K'] 到时返回的数据里面可以直接使用 $data['金额'] 的值
      * @return false|array 失败时返回false,否则返回数组.
      */
-    public function readLine($row = 0, $formatData = true)
+    public function readLine($row = 0, $formatData = true, $title = array())
     {
         if ($row == 0) $row = $this->currentRow;
         if ($row > $this->maxRow) return false;
@@ -120,6 +122,11 @@ class Excel
         if (is_array($formatData)) {
             foreach ($formatData as $n => $v) {
                 $data[$row][$n] = NumberFormat::toFormattedString($data[$row][$n], $v);
+            }
+        }
+        if (!empty($title)) {
+            foreach ($title as $k => $v) {
+                if ($v) $data[$row][$k] = $data[$row][$v];
             }
         }
         $this->currentRow = $row + 1;
