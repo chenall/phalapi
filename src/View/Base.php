@@ -1,5 +1,7 @@
 <?php
+
 namespace Chenall\PhalApi\View;
+
 /**
  * PhalApi简易视图 by chenall 2018-08-23
  */
@@ -41,7 +43,7 @@ class Base
         $this->action = $request->getServiceAction();
         $root = $request->getNamespace();
         $root .= '\\Api\\' . $server;
-		//通过反射获取当前API对应的视图文件位置
+        //通过反射获取当前API对应的视图文件位置
         $path = new \ReflectionClass($root);
         $root = dirname($path->getFileName());
         $this->view_root = $root . '/../View/' . $server . '/';
@@ -75,12 +77,12 @@ class Base
 
     /**
      * 渲染模板
-     * @param array $options 参数
+     * @param string $name 模板名称(默认=当前调用方法)
      * @return void
      */
-    public function show()
+    public function show($name = null)
     {
-        echo $this->load($this->action, $this->options);
+        echo $this->load($name ?? $this->action, $this->options);
         exit();
     }
 
@@ -97,7 +99,7 @@ class Base
         $view = $this->view_root . $name . '.html';
         ob_start();
         ob_implicit_flush(false);
-		//检查文件是否存在
+        //检查文件是否存在
         if (file_exists($view)) {
             include_once($view);
         } else {
