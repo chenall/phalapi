@@ -126,7 +126,7 @@ class Excel
         }
         if (!empty($title)) {
             foreach ($title as $k => $v) {
-                if ($v) $data[$row][$k] = $data[$row][$v];
+                if ($v) $data[$row][$k] = trim($data[$row][$v]);
             }
         }
         $this->currentRow = $row + 1;
